@@ -35,6 +35,7 @@ const addToCart = async (productId) => {
     salePrice: price,
   };
   cartItems.appendChild(createCartItemElement(product));
+  saveCartItems(cartItems.innerHTML);
 };
 
 function createProductItemElement({ sku, name, image }) {
@@ -67,4 +68,9 @@ const createProductsList = async () => {
 
 window.onload = () => {
   createProductsList();
+  getSavedCartItems(cartItems);
+  const allCartProducts = document.getElementsByClassName('cart__item');
+  Object.values(allCartProducts).forEach((product) => {
+    product.addEventListener('click', cartItemClickListener);
+  });
 };
