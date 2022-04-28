@@ -1,4 +1,5 @@
 const productsSection = document.getElementsByClassName('items')[0];
+const cartItems = document.getElementsByClassName('cart__items')[0];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -14,21 +15,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
-  const section = document.createElement('section');
-  section.className = 'item';
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  return section;
-}
-
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-
 function cartItemClickListener(event) {
   // coloque seu código aqui
 }
@@ -41,15 +27,40 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+const addToCart = async (productId) => {
+  const { id, title, price } = await fetchItem(productId);
+  const product = {
+    sku: id,
+    name: title,
+    salePrice: price,
+  };
+  cartItems.appendChild(createCartItemElement(product));
+};
+
+function createProductItemElement({ sku, name, image }) {
+  const section = document.createElement('section');
+  section.className = 'item';
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!')).addEventListener('click', () => { addToCart(sku); });
+
+  return section;
+}
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
 const createProductsList = async () => {
   const api = await fetchProducts('computador');
-  api.results.forEach((product) => {
-    const item = {
-      sku: product.id,
-      name: product.title,
-      image: product.thumbnail,
+  api.results.forEach(({ id, title, thumbnail }) => {
+    const object = {
+      sku: id,
+      name: title,
+      image: thumbnail,
     };
-    productsSection.appendChild(createProductItemElement(item));
+    productsSection.appendChild(createProductItemElement(object));
   });
 };
 
