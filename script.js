@@ -1,5 +1,6 @@
 const productsSection = document.getElementsByClassName('items')[0];
 const cartItems = document.getElementsByClassName('cart__items')[0];
+const emptyCart = document.getElementsByClassName('empty-cart')[0];
 const totalPrice = document.getElementsByClassName('total-price')[0];
 let sum = 0;
 
@@ -93,6 +94,14 @@ const createProductsList = async () => {
   });
 };
 
+emptyCart.addEventListener('click', () => {
+  cartItems.innerHTML = '';
+  localStorage.removeItem(cartItems);
+  totalPrice.innerHTML = 0;
+  localStorage.setItem('cartTotalPrice', 0);
+  saveCartItems(cartItems.innerHTML);
+});
+
 window.onload = () => {
   createProductsList();
   getSavedCartItems(cartItems, totalPrice);
@@ -101,5 +110,4 @@ window.onload = () => {
   Object.values(allCartProducts).forEach((product) => {
     product.addEventListener('click', cartItemClickListener);
   });
-  console.log(sum);
 };
