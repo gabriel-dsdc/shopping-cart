@@ -1,6 +1,7 @@
 const productsSection = document.getElementsByClassName('items')[0];
 const cartItems = document.getElementsByClassName('cart__items')[0];
 const emptyCart = document.getElementsByClassName('empty-cart')[0];
+const loading = document.getElementsByClassName('loading')[0];
 const totalPrice = document.getElementsByClassName('total-price')[0];
 let sum = 0;
 
@@ -92,6 +93,7 @@ const createProductsList = async () => {
     };
     productsSection.appendChild(createProductItemElement(object));
   });
+  loading.remove();
 };
 
 emptyCart.addEventListener('click', () => {
